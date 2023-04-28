@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping("/workout")
 @RequiredArgsConstructor
@@ -28,6 +31,24 @@ import javax.validation.Valid;
 public class WorkoutController {
     private final WorkoutService workoutService;
 
+    @ApiOperation(value = "Finds workout by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Request successful"),
+            @ApiResponse(code = 404, message = "Workout not found"),
+    })
+    @GetMapping("/find/{id}")
+    public ResponseEntity<WorkoutDto> findWorkoutById(@PathVariable("id") String workoutId){
+        return ResponseEntity.ok(workoutService.findWorkoutById(workoutId));
+    }
+
+    @ApiOperation(value = "Finds all workouts")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Request successful"),
+    })
+    @GetMapping("/find/all")
+    public ResponseEntity<List<WorkoutDto>> findAllWorkouts(){
+        return ResponseEntity.ok(workoutService.findAllWorkouts());
+    }
 
     @ApiOperation(value = "Creates a new workout")
     @ApiResponses(value = {
@@ -53,6 +74,17 @@ public class WorkoutController {
                                                     BindingResult bindingResult){
         validateFields(bindingResult);
         return ResponseEntity.ok(workoutService.updateWorkoutById(workoutId, workoutData));
+    }
+
+    @ApiOperation(value = "Deletes workout and its exercises")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Request successful"),
+            @ApiResponse(code = 404, message = "Workout not found")
+    })
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteWorkout(@PathVariable("id") String workoutId){
+        workoutService.deleteWorkoutById(workoutId);
+        return ResponseEntity.ok().build();
     }
 
     private static void validateFields(BindingResult bindingResult) {

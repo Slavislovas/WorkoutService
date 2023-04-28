@@ -12,4 +12,6 @@ public interface WorkoutService {
     WorkoutDto createWorkout(WorkoutCreationDto workoutCreationDto) throws JsonProcessingException;
 
     WorkoutDto updateWorkoutById(String workoutId, WorkoutDto workoutData);
+
+    void deleteWorkoutById(String workoutId);
 }

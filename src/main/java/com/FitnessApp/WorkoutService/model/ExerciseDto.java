@@ -2,6 +2,8 @@ package com.FitnessApp.WorkoutService.model;
 
 
 import com.FitnessApp.WorkoutService.business.enums.ExerciseType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -51,4 +53,13 @@ public class ExerciseDto {
     @NotNull
     @ApiModelProperty(name = "type", notes = "Type of the exercise", example = "Strength")
     private ExerciseType type;
+
+    public String toJsonString() {
+        JsonMapper jsonMapper = new JsonMapper();
+        try {
+            return jsonMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

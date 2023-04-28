@@ -14,7 +14,7 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public NewTopic editWorkoutTopic(){
-        return TopicBuilder.name("workout-exercise-edit").build();
+    public NewTopic deleteWorkoutTopic(){
+        return TopicBuilder.name("workout-exercise-delete").build();
     }
 }
